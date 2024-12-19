@@ -12,7 +12,6 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Simulating API call with static data
         const mockData = {
           totalApplications: 307,
           uniqueStudents: 29,
@@ -56,15 +55,15 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading dashboard...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl text-gray-600">Loading dashboard...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl text-red-600">{error}</div>
       </div>
     );
@@ -72,94 +71,67 @@ const App = () => {
 
   const renderOverview = () => (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Key Metrics</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-gray-50 rounded">
-              <div className="text-sm font-medium text-gray-500">Total Applications</div>
-              <div className="mt-2 text-3xl font-semibold">{data?.totalApplications}</div>
-            </div>
-            <div className="p-4 bg-gray-50 rounded">
-              <div className="text-sm font-medium text-gray-500">Active Students</div>
-              <div className="mt-2 text-3xl font-semibold">{data?.uniqueStudents}</div>
-            </div>
-            <div className="p-4 bg-gray-50 rounded">
-              <div className="text-sm font-medium text-gray-500">Countries</div>
-              <div className="mt-2 text-3xl font-semibold">{data?.uniqueCountries}</div>
-            </div>
-            <div className="p-4 bg-gray-50 rounded">
-              <div className="text-sm font-medium text-gray-500">Ivy+ Institutions</div>
-              <div className="mt-2 text-3xl font-semibold">{data?.ivyPlusPercentage}%</div>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700">Total Applications</h3>
+          <p className="text-3xl font-bold text-blue-600 mt-2">{data.totalApplications}</p>
         </div>
-
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Geographic Distribution</h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={data?.geographicDistribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({name, value}) => `${name} (${value})`}
-                >
-                  {data?.geographicDistribution?.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700">Unique Students</h3>
+          <p className="text-3xl font-bold text-green-600 mt-2">{data.uniqueStudents}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700">Countries</h3>
+          <p className="text-3xl font-bold text-purple-600 mt-2">{data.uniqueCountries}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700">Ivy+ %</h3>
+          <p className="text-3xl font-bold text-orange-600 mt-2">{data.ivyPlusPercentage}%</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Students by Number of Countries</h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data?.studentsByCountries}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="count" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="students" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Application Types</h3>
-          <div style={{ height: '300px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Application Types</h3>
+          <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data?.applicationTypes}
+                  data={data.applicationTypes}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
+                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({name, value}) => `${name}: ${value}`}
                 >
-                  {data?.applicationTypes?.map((entry, index) => (
+                  {data.applicationTypes.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
                 <Legend />
               </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Geographic Distribution</h3>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data.geographicDistribution}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#8884d8">
+                  {data.geographicDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -222,10 +194,10 @@ const App = () => {
 
   const renderAnalytics = () => (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Application Volume by Institution</h3>
-          <div style={{ height: '400px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Application Volume by Institution</h3>
+          <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={[
@@ -247,9 +219,9 @@ const App = () => {
           </div>
         </div>
 
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">Early vs Regular Decision Strategy</h3>
-          <div style={{ height: '400px' }}>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Early vs Regular Decision Strategy</h3>
+          <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[
                 { name: 'Stanford', early: 2, regular: 3 },
@@ -270,10 +242,10 @@ const App = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-4 border rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">University Applications by QS Ranking Tiers (2024-2025)</h3>
-          <div style={{ height: '400px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">University Applications by QS Ranking Tiers (2024-2025)</h3>
+          <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -307,50 +279,54 @@ const App = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`
-                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
-                ${activeTab === 'overview'
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
-              `}
-            >
-              Application Overview
-            </button>
-            <button
-              onClick={() => setActiveTab('timeline')}
-              className={`
-                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
-                ${activeTab === 'timeline'
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
-              `}
-            >
-              Timeline Analysis
-            </button>
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`
-                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
-                ${activeTab === 'analytics'
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
-              `}
-            >
-              Strategic Insights
-            </button>
-          </nav>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">College Applications Dashboard</h1>
+          <p className="mt-2 text-gray-600">Track and analyze college application data</p>
         </div>
 
-        <div className="mt-6">
-          {activeTab === 'overview' && renderOverview()}
-          {activeTab === 'timeline' && renderTimeline()}
-          {activeTab === 'analytics' && renderAnalytics()}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8 px-6" aria-label="Tabs">
+              <button
+                onClick={() => setActiveTab('overview')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'overview'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveTab('timeline')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'timeline'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Timeline Analysis
+              </button>
+              <button
+                onClick={() => setActiveTab('analytics')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'analytics'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Strategic Insights
+              </button>
+            </nav>
+          </div>
+
+          <div className="p-6">
+            {activeTab === 'overview' && renderOverview()}
+            {activeTab === 'timeline' && renderTimeline()}
+            {activeTab === 'analytics' && renderAnalytics()}
+          </div>
         </div>
       </div>
     </div>
