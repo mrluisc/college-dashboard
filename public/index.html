@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College Dashboard</title>
+    <script type="module" src="/src/main.jsx"></script>
+    <style>
+      .fallback {
+        display: none;
+      }
+      .root:empty + .fallback {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div class="fallback">
+      <div style="text-align: center;">
+        <h1>College Dashboard</h1>
+        <p>If you're seeing this message, please try:</p>
+        <ol style="text-align: left;">
+          <li>Refreshing the page</li>
+          <li>Clearing your browser cache</li>
+          <li>Using a different browser</li>
+        </ol>
+        <p>Status: Loading Application...</p>
+      </div>
+    </div>
+  </body>
+</html>
