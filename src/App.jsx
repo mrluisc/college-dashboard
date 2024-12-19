@@ -10,39 +10,65 @@ const App = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#d53e4f'];
 
   useEffect(() => {
-    // Simulating API call with static data
-    setTimeout(() => {
-      setData({
-        totalApplications: 307,
-        uniqueStudents: 29,
-        uniqueCountries: 14,
-        ivyPlusPercentage: 37.9,
-        applicationTypes: [
-          { name: 'Common App', value: 222 },
-          { name: 'UC Application', value: 45 },
-          { name: 'UCAS', value: 12 },
-          { name: 'Other Application', value: 18 },
-          { name: 'Online App / Mail', value: 10 }
-        ],
-        geographicDistribution: [
-          { name: 'United States', value: 267 },
-          { name: 'United Kingdom', value: 14 },
-          { name: 'Netherlands', value: 6 },
-          { name: 'South Korea', value: 5 },
-          { name: 'Singapore', value: 3 },
-          { name: 'Canada', value: 3 },
-          { name: 'Other', value: 9 }
-        ],
-        studentsByCountries: [
-          { count: "1 Country", students: 21 },
-          { count: "2 Countries", students: 4 },
-          { count: "3 Countries", students: 2 },
-          { count: "4+ Countries", students: 1 }
-        ]
-      });
-      setLoading(false);
-    }, 1000);
+    const fetchData = async () => {
+      try {
+        // Simulating API call with static data
+        const mockData = {
+          totalApplications: 307,
+          uniqueStudents: 29,
+          uniqueCountries: 14,
+          ivyPlusPercentage: 37.9,
+          applicationTypes: [
+            { name: 'Common App', value: 222 },
+            { name: 'UC Application', value: 45 },
+            { name: 'UCAS', value: 12 },
+            { name: 'Other Application', value: 18 },
+            { name: 'Online App / Mail', value: 10 }
+          ],
+          geographicDistribution: [
+            { name: 'United States', value: 267 },
+            { name: 'United Kingdom', value: 14 },
+            { name: 'Netherlands', value: 6 },
+            { name: 'South Korea', value: 5 },
+            { name: 'Singapore', value: 3 },
+            { name: 'Canada', value: 3 },
+            { name: 'Other', value: 9 }
+          ],
+          studentsByCountries: [
+            { count: "1 Country", students: 21 },
+            { count: "2 Countries", students: 4 },
+            { count: "3 Countries", students: 2 },
+            { count: "4+ Countries", students: 1 }
+          ]
+        };
+        
+        setData(mockData);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error loading data:', err);
+        setError('Failed to load dashboard data. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading dashboard...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-red-600">{error}</div>
+      </div>
+    );
+  }
 
   const renderOverview = () => (
     <div className="space-y-6">
@@ -279,14 +305,6 @@ const App = () => {
       </div>
     </div>
   );
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
